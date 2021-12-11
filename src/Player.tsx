@@ -1,8 +1,7 @@
-// @ts-nocheck
 import { usePlane, useSphere } from "@react-three/cannon"
 import { useFrame, useThree } from "@react-three/fiber"
 
-const Player = (props) => {
+export default function Player() {
   const viewport = useThree((state) => state.viewport)
 
   //_ player
@@ -10,8 +9,15 @@ const Player = (props) => {
     type: "Kinematic",
     args: [3],
     mass: 10,
-    ...props,
   }))
+
+  //* player movement
+  useFrame(({ mouse }) => {
+    const x = (mouse.x * viewport.width) / 2
+    const y = (mouse.y * viewport.height) / 2
+    position.set(x, 0, -y)
+    rotation.set(-y, 0, x)
+  })
 
   //_ ground
   usePlane(() => ({
@@ -49,14 +55,5 @@ const Player = (props) => {
     args: [viewport.width, viewport.height],
   }))
 
-  useFrame(({ mouse }) => {
-    const x = (mouse.x * viewport.width) / 2
-    const y = (mouse.y * viewport.height) / 2
-    position.set(x, 0, -y)
-    rotation.set(-y, 0, x)
-  })
-
   return <pointLight ref={player} intensity={10} color='white' distance={8} />
 }
-
-export default Player

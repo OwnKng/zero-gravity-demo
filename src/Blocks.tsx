@@ -4,8 +4,11 @@ import { useMemo } from "react"
 import * as THREE from "three"
 import { Geometry } from "three-stdlib/deprecated/Geometry"
 import { useThree } from "@react-three/fiber"
+import type { ConvexPolyhedronProps } from "@react-three/cannon"
 
-const toConvexProps = (bufferGeometry: THREE.BufferGeometry) => {
+const toConvexProps = (
+  bufferGeometry: THREE.BufferGeometry
+): ConvexPolyhedronProps["args"] => {
   const geo = new Geometry().fromBufferGeometry(bufferGeometry)
   geo.mergeVertices()
   return [
@@ -61,7 +64,7 @@ export default function BlocksWrapper() {
     () =>
       Float32Array.from(
         new Array(40)
-          .fill()
+          .fill(0)
           .flatMap((_, i) => tempColor.set(data[i].color).toArray())
       ),
     []
