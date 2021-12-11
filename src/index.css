@@ -5,6 +5,7 @@ body {
     sans-serif;
 
   background: #08121c;
+  font-size: 120%;
 }
 
 .text {
@@ -18,7 +19,7 @@ body {
   place-items: center;
   z-index: -1;
 
-  font-size: 100px;
+  font-size: 4rem;
   color: white;
 }
 
