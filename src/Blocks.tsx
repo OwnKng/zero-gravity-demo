@@ -16,8 +16,8 @@ const toConvexProps = (bufferGeometry: THREE.BufferGeometry) => {
 }
 
 const Blocks = ({ colorArray }: any) => {
-  const size = 0.8
-  const number = 50
+  const size = 0.9
+  const number = 40
 
   const geometry = useMemo(() => new THREE.IcosahedronGeometry(size, 0), [])
   const args = useMemo(() => toConvexProps(geometry), [geometry])
@@ -49,18 +49,18 @@ const Blocks = ({ colorArray }: any) => {
 
 const tempColor = new THREE.Color()
 
-const data = Array.from({ length: 50 }, () => ({
+const data = Array.from({ length: 40 }, () => ({
   color: ["#5ADBFF", "#006DAA", "#F15152", "#ffffff"][
     Math.floor(Math.random() * 5)
   ],
   scale: 1,
 }))
 
-const BlocksWrapper = () => {
+export default function BlocksWrapper() {
   const colorArray = useMemo(
     () =>
       Float32Array.from(
-        new Array(50)
+        new Array(40)
           .fill()
           .flatMap((_, i) => tempColor.set(data[i].color).toArray())
       ),
@@ -69,5 +69,3 @@ const BlocksWrapper = () => {
 
   return <Blocks colorArray={colorArray} />
 }
-
-export default BlocksWrapper
