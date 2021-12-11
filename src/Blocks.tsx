@@ -1,27 +1,73 @@
-import { useBox } from "@react-three/cannon"
+//@ts-nocheck
+import { useConvexPolyhedron } from "@react-three/cannon"
+import { useMemo } from "react"
+import * as THREE from "three"
+import { Geometry } from "three-stdlib/deprecated/Geometry"
+import { useThree } from "@react-three/fiber"
 
-const Blocks = () => {
-  const size = 0.5
-  const number = 80
+const toConvexProps = (bufferGeometry: THREE.BufferGeometry) => {
+  const geo = new Geometry().fromBufferGeometry(bufferGeometry)
+  geo.mergeVertices()
+  return [
+    geo.vertices.map((v) => [v.x, v.y, v.z]),
+    geo.faces.map((f) => [f.a, f.b, f.c]),
+    [],
+  ]
+}
 
-  const [ref] = useBox(() => ({
-    mass: 1,
-    args: [size, size, size],
-    position: [(Math.random() - 0.5) * 40, 1, (Math.random() - 0.5) * 10],
+const Blocks = ({ colorArray }: any) => {
+  const size = 0.8
+  const number = 50
+
+  const geometry = useMemo(() => new THREE.IcosahedronGeometry(size, 0), [])
+  const args = useMemo(() => toConvexProps(geometry), [geometry])
+  const { viewport } = useThree()
+
+  const [ref] = useConvexPolyhedron(() => ({
+    mass: 0.5,
+    args: args,
+    position: [
+      (Math.random() - 0.5) * viewport.width,
+      1,
+      (Math.random() - 0.5) * viewport.height,
+    ],
     rotation: [Math.random(), 0, 0],
   }))
 
   return (
-    <instancedMesh
-      ref={ref}
-      args={[undefined, undefined, number]}
-      castShadow
-      receiveShadow
-    >
-      <boxGeometry args={[size, size, size]} />
-      <meshNormalMaterial color='blue' />
+    <instancedMesh ref={ref} args={[undefined, undefined, number]}>
+      <icosahedronGeometry args={[size, 0]}>
+        <instancedBufferAttribute
+          attachObject={["attributes", "color"]}
+          args={[colorArray, 3]}
+        />
+      </icosahedronGeometry>
+      <meshPhongMaterial vertexColors={THREE.VertexColors} />
     </instancedMesh>
   )
 }
 
-export default Blocks
+const tempColor = new THREE.Color()
+
+const data = Array.from({ length: 50 }, () => ({
+  color: ["#5ADBFF", "#006DAA", "#F15152", "#ffffff"][
+    Math.floor(Math.random() * 5)
+  ],
+  scale: 1,
+}))
+
+const BlocksWrapper = () => {
+  const colorArray = useMemo(
+    () =>
+      Float32Array.from(
+        new Array(50)
+          .fill()
+          .flatMap((_, i) => tempColor.set(data[i].color).toArray())
+      ),
+    []
+  )
+
+  return <Blocks colorArray={colorArray} />
+}
+
+export default BlocksWrapper
