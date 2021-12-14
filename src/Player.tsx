@@ -1,13 +1,14 @@
-//@ts-nocheck
-import { useBox, usePlane, useSphere } from "@react-three/cannon"
+// @ts-nocheck
+import { usePlane } from "@react-three/cannon"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useRef } from "react"
+import * as THREE from "three"
 
 export default function Player() {
   const viewport = useThree((state) => state.viewport)
 
   //_ player
-  const ref = useRef()
+  const ref = useRef<THREE.Mesh>()
 
   //* player movement
   useFrame(({ mouse }) => {
