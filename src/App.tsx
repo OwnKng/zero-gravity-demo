@@ -6,7 +6,7 @@ export default function App() {
     <div className='app'>
       <Scene />
       <div className='text'>
-        <h1>Hello World!</h1>
+        <h1>exploration</h1>
       </div>
     </div>
   )
