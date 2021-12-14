@@ -1,7 +1,5 @@
-# Icosahedron cannon
+# Zero Gravity
 
 An interactive demo of icosahedron physics made with React, React Three Fiber and Use Cannon.
 
-View in action on [https://ownkng.dev/](https://ownkng.dev/).
-
-![Icosahedron Cannon](/public/icosahedron-cannon.png).
+![Zero Gravity](/public/zero-gravity.png).
