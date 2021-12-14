@@ -1,30 +1,20 @@
-import { usePlane, useSphere } from "@react-three/cannon"
+//@ts-nocheck
+import { useBox, usePlane, useSphere } from "@react-three/cannon"
 import { useFrame, useThree } from "@react-three/fiber"
+import { useRef } from "react"
 
 export default function Player() {
   const viewport = useThree((state) => state.viewport)
 
   //_ player
-  const [player, { position, rotation }] = useSphere(() => ({
-    type: "Kinematic",
-    args: [3],
-    mass: 10,
-  }))
+  const ref = useRef()
 
   //* player movement
   useFrame(({ mouse }) => {
     const x = (mouse.x * viewport.width) / 2
     const y = (mouse.y * viewport.height) / 2
-    position.set(x, 0, -y)
-    rotation.set(-y, 0, x)
+    ref.current.position.set(x, 0, y)
   })
-
-  //_ ground
-  usePlane(() => ({
-    rotation: [-Math.PI * 0.5, 0, 0],
-    position: [0, 0.1, 0],
-    args: [viewport.width, viewport.height],
-  }))
 
   //_ walls
   //* top
@@ -55,5 +45,19 @@ export default function Player() {
     args: [viewport.width, viewport.height],
   }))
 
-  return <pointLight ref={player} intensity={10} color='white' distance={8} />
+  //* box top
+  usePlane(() => ({
+    rotation: [Math.PI * 0.5, 0, 0],
+    position: [0, 10, 0],
+    args: [viewport.width, viewport.height],
+  }))
+
+  //* box bottom
+  usePlane(() => ({
+    rotation: [-Math.PI * 0.5, 0, 0],
+    position: [0, 0, 0],
+    args: [viewport.width, viewport.height],
+  }))
+
+  return <pointLight ref={ref} intensity={1} color='white' />
 }

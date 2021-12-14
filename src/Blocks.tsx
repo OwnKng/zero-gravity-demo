@@ -27,11 +27,11 @@ const Blocks = ({ colorArray }: any) => {
   const { viewport } = useThree()
 
   const [ref] = useConvexPolyhedron(() => ({
-    mass: 0.5,
+    mass: 0.1,
     args: args,
     position: [
       (Math.random() - 0.5) * viewport.width,
-      1,
+      (Math.random() - 0.5) * 5,
       (Math.random() - 0.5) * viewport.height,
     ],
     rotation: [Math.random(), 0, 0],
